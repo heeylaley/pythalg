@@ -10,15 +10,16 @@ def med_income_quant(a):
     val_list = []
 
     for comp in a:
-        val_list.append(comp.profit)
+        val_list.append(sum(comp.profit) / 4)
 
     med_profit = mean(val_list)
     print(f'Средняя прибыль = {med_profit}')
 
     for comp in a:
-        if comp.profit > med_profit:
+        mean_profit = sum(comp.profit) / 4
+        if mean_profit > med_profit:
             print(f'У компании "{comp.name}" прибыль выше средней')
-        elif comp.profit == med_profit:
+        elif mean_profit == med_profit:
             print(f'У компании "{comp.name}" средняя прибыль')
         else:
             print(f'У компании "{comp.name}" прибыль ниже средней')
@@ -30,7 +31,8 @@ companies = []
 n = int(input('Введите количество предприятий: '))
 
 for el in range(1, n + 1):
-    company = Company(input('Название компании: '), int(input('Прибыль компании: ')))
+    company = Company(input('Название компании: '), list(int(input(f'Прибыль компании за {i}й квартал: ')) for i in
+                                                         range(1, 5)))
     companies.append(company)
 
 print('-' * 50)

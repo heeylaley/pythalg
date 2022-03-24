@@ -5,22 +5,25 @@
 
 from collections import Counter
 
-num_1 = Counter(input('Введите первое число: '))
-num_2 = Counter(input('Введите второе число: '))
+num_1 = list(input('Введите первое число: '))
+num_2 = list(input('Введите второе число: '))
 
 
 def to_dec(a):
     hxs = {s: i for i, s in enumerate(list('0123456789ABCDEF'))}
+
     return sum([int(hxs[s]) * 16 ** i for i, s in enumerate(a[::-1])])
 
 
-def to_hex(num: int) -> str:
+def to_hex(num: int):
     dcs = {i: s for i, s in enumerate(list('0123456789ABCDEF'))}
-    st = ''
+    res = []
+
     while num % 16 > 0:
-        st += dcs[num % 16]
+        res.append(dcs[num % 16])
         num //= 16
-    return st[::-1]
+
+    return res
 
 
 num_sum = to_dec(num_1) + to_dec(num_2)
