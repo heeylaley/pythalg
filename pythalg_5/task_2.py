@@ -3,7 +3,7 @@
 # Например, пользователь ввёл A2 и C4F. Нужно сохранить их как [‘A’, ‘2’] и [‘C’, ‘4’, ‘F’] соответственно.
 # Сумма чисел из примера: [‘C’, ‘F’, ‘1’], произведение - [‘7’, ‘C’, ‘9’, ‘F’, ‘E’].
 
-from collections import Counter
+from collections import deque
 
 num_1 = list(input('Введите первое число: '))
 num_2 = list(input('Введите второе число: '))
@@ -17,7 +17,7 @@ def to_dec(a):
 
 def to_hex(num: int):
     dcs = {i: s for i, s in enumerate(list('0123456789ABCDEF'))}
-    res = []
+    res = deque()
 
     while num % 16 > 0:
         res.append(dcs[num % 16])
