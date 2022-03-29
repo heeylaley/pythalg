@@ -1,8 +1,6 @@
-import random
+from random import sample
 
 
 def rand_arr(minn, maxx):
-    res = [el for el in range(minn, maxx)]
-    random.shuffle(res)
-
+    res = sample(range(minn, maxx), 19)
     return res

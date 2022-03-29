@@ -2,10 +2,11 @@
 # Медианой называется элемент ряда, делящий его на две равные части: в одной находятся элементы, которые не меньше
 # медианы, в другой — не больше медианы.
 
-from random import sample
+from rand_arr import rand_arr
 from statistics import median
 
 
+# код исключительно для НЕЧЕТНОГО количества элементов в массиве
 def select(a, left, right, n):
     while True:
         if left == right:
@@ -69,7 +70,7 @@ def pivot(a, left, right):
     return select(a, left, left + (right - left) // 5, mid)
 
 
-array = sample(range(0, 100), 13)  # исключает повторные значения
+array = rand_arr(0, 100)
 print(array)
 print(median(array))  # вообще можно было обойтись этой функцией, так как правилам задания median() не противоречит))0
 # но оставим просто в качестве проверки
