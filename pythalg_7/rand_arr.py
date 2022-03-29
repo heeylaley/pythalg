@@ -1,6 +1,6 @@
-from random import sample
+from random import randint
 
 
 def rand_arr(minn, maxx):
-    res = sample(range(minn, maxx), 19)
+    res = [randint(minn, maxx - 1) for _ in range(19)]
     return res
