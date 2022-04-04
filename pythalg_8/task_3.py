@@ -1,6 +1,18 @@
 # 3. Написать программу, которая обходит не взвешенный ориентированный граф без петель, в котором все вершины связаны,
 # по алгоритму поиска в глубину (Depth-First Search).
 
+def graph_maker(n):
+    res = {}
+    n_while = 0
+
+    while n_while < n:
+        i = int(input(f'Сколько стрелок отходит от вершины {n_while + 1}: '))
+        res[n_while + 1] = list(int(input(f'{el}й связанный элемент: ')) for el in range(1, i + 1))
+        n_while += 1
+
+    return res
+
+
 def dfs(graph, node, visited):
     if node not in visited:
         visited.append(node)
@@ -11,17 +23,11 @@ def dfs(graph, node, visited):
     return visited
 
 
-grph = {}
-n = int(input('Сколько будет вершин?: '))
+grph_param = int(input('Сколько будет вершин?: '))
+grph = graph_maker(grph_param)
 start = int(input('От какой вершины пойдём?: '))  # сделала вариант, где вершины обозначаются цифрами
-n_while = 0
-
-while n_while < n:
-    i = int(input(f'Сколько стрелок отходит от вершины {n_while + 1}: '))
-    grph[n_while + 1] = list(int(input(f'{el}й связанный элемент: ')) for el in range(1, i + 1))
-    n_while += 1
-
 print(grph)
+
 visited = dfs(grph, start,  [])
 print('Путь:')
 print(visited)
