@@ -1,43 +1,92 @@
 # 2. Закодируйте любую строку по алгоритму Хаффмана.
 
-from collections import Counter, namedtuple
-import heapq  # для работы с кучами
+from collections import Counter, OrderedDict
 
 
-class Node(namedtuple("Node", ["left", "right"])):
-    def get_code(self, n_code, n_bin_code):
-        self.left.get_code(n_code, n_bin_code + "0")
-        self.right.get_code(n_code, n_bin_code + "1")
+class Node:
+    def __init__(self, value, left, right):
+        self.value = value
+        self.left = left
+        self.right = right
 
 
-class Leaf(namedtuple("Leaf", ["symbol"])):
-    def get_code(self, l_code, l_bin_code):
-        l_code[self.symbol] = l_bin_code or "0"
+class Leaf:
+    def __init__(self, symbol: str, value: int):
+        self.symbol = symbol
+        self.value = value
 
 
-def huffman(a):
-    sybl_list = Counter(a).items()
-    sybl_heap = [(freq, len(a.replace(sym, '')), Leaf(sym)) for sym, freq in sybl_list]
-    heapq.heapify(sybl_heap)
+class Huffman:
+    tree: list
 
-    while len(sybl_heap) > 1:
-        freq1, cnt1, left = heapq.heappop(sybl_heap)
-        freq2, cnt2, right = heapq.heappop(sybl_heap)
-        heapq.heappush(sybl_heap, (freq1 + freq2, cnt1 + cnt2, Node(left, right)))
+    def __init__(self):
+        self.code = dict()
+        self.tree = []
+        self.text = ''
 
-    return sybl_heap
+    def leaf_list(self, a):
+        counter = dict(Counter(a))
+        counter = OrderedDict(sorted(counter.items(), key=lambda k: k[1], reverse=True))
+
+        for symbol, value in counter.items():
+            self.tree.append(Leaf(symbol, value))
+
+        return True
+
+    def huff_leaf(self):
+        try:
+            while len(self.tree) > 2:
+                b, a = self.tree.pop(), self.tree.pop()
+                spam = Node(a.value + b.value, a, b)
+
+                if spam.value > self.tree[0].value:
+                    self.tree.insert(0, spam)
+                elif spam.value < self.tree[-1].value:
+                    self.tree.append(spam)
+                else:
+                    for i in range(1, len(self.tree)):
+                        if self.tree[i - 1].value >= spam.value > self.tree[i].value:
+                            self.tree.insert(i, spam)
+                            break
+
+            self.tree = Node(self.tree[0].value + self.tree[1].value, self.tree[0], self.tree[1])
+
+        except IndexError or self.tree == []:
+            print('Ваша строчка должна содержать не меньше 2 символов!')
+
+    def huff_recursion(self, data, code=''):
+        if isinstance(data, Node):
+            self.huff_recursion(data.left, code=code + '0')
+            self.huff_recursion(data.right, code=code + '1')
+        elif isinstance(data, Leaf):
+            self.code[data.symbol] = code
+
+    def _encode(self):
+        res = []
+
+        for el in self.text:
+            res.append(self.code[el])
+
+        return ''.join(res)
+
+    def encode(self, b):
+        self.__init__()
+        self.text = b
+        self.leaf_list(b)
+        self.huff_leaf()
+        self.huff_recursion(self.tree)
+        res = self._encode()
+
+        return res
+
+    def get_table(self):
+        return self.code
 
 
-res = {}
-code_in = input('Введите строку: ')
-symbl_heap = huffman(code_in)
+txt = input('Введите строку: ')
+huff = Huffman()
 
-if symbl_heap:
-    [(_freq, _count, root)] = symbl_heap
-    root.get_code(res, "")
-
-print("Таблица кодирования по алгоритму Хаффмана:")
-for symbl, bin_code in res.items():
-    print(f'{symbl} - {bin_code}')
-
-print(f'Закодировання строка: {" ".join([res[el] for el in code_in])}')
+print('Результат кодирования:')
+print(huff.encode(txt))
+print('Таблица кодирования:')
+print(huff.get_table())
