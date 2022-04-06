@@ -9,13 +9,13 @@ def substring(a):
     if a == '':
         return 0
 
-    hash_set = set([a[x:y] for x, y in combinations(range(len(a) + 1), r=2)])
-    hash_list = list(hash_set)
-    hash_list.pop(hash_list.index(a))
+    hash_set = set()
 
-    res = [sha1(element.encode('utf-8')).hexdigest() for element in hash_list]
+    for i in range(len(a) - 1):
+        for j in range(i + 1, len(a) + 1):
+            hash_set.add(hash(a[i:j]))
 
-    return len(res)
+    return len(hash_set) - 1
 
 
 hash_str = input('Введите строку: ')
