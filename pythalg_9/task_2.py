@@ -39,7 +39,7 @@ class Huffman:
                 b, a = self.tree.pop(), self.tree.pop()
                 spam = Node(a.value + b.value, a, b)
 
-                if spam.value > self.tree[0].value:
+                if spam.value >= self.tree[0].value:
                     self.tree.insert(0, spam)
                 elif spam.value < self.tree[-1].value:
                     self.tree.append(spam)
@@ -52,7 +52,7 @@ class Huffman:
             self.tree = Node(self.tree[0].value + self.tree[1].value, self.tree[0], self.tree[1])
 
         except IndexError or self.tree == []:
-            print('Ваша строчка должна содержать не меньше 2 символов!')
+            print('Ваша строчка должна содержать не меньше 2 разных символов!')
 
     def huff_recursion(self, data, code=''):
         if isinstance(data, Node):
